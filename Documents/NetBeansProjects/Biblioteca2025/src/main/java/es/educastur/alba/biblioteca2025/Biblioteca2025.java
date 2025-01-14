@@ -68,8 +68,8 @@ public class Biblioteca2025 {
             System.out.println("1. NUEVO LIBRO");
             System.out.println("2. ELIMINAR LIBRO");
             System.out.println("3. MODIFICAR LIBRO");
-            System.out.println("4. LISTADOS");
-            System.out.println("SALIR");
+            System.out.println("4. LISTADO DE LIBROS");
+            System.out.println("9. SALIR");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1: {
@@ -99,8 +99,8 @@ public class Biblioteca2025 {
             System.out.println("USUARIOS");
             System.out.println("1. NUEVO USUARIO");
             System.out.println("2. ELIMINAR USUARIO");
-            System.out.println("3. USUARIOS");
-            System.out.println("SALIR");
+            System.out.println("3. LISTADO DE USUARIOS");
+            System.out.println("9. SALIR");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1: {
@@ -133,7 +133,7 @@ public class Biblioteca2025 {
             System.out.println("6. LISTADO DE PRÉSTAMOS-LIBROS");
             System.out.println("7. LIBRO MÁS PRESTADO");
             System.out.println("8. USUARIO CON MÁS PRÉSTAMOS");
-            System.out.println("SALIR");
+            System.out.println("9. SALIR");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1: {
