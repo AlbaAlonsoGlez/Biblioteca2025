@@ -131,6 +131,8 @@ public class Biblioteca2025 {
             System.out.println("4. LISTADO GENERAL DE PRÉSTAMOS");
             System.out.println("5. LISTADO DE PRÉSTAMOS-USUARIOS");
             System.out.println("6. LISTADO DE PRÉSTAMOS-LIBROS");
+            System.out.println("7. LIBRO MÁS PRESTADO");
+            System.out.println("8. USUARIO CON MÁS PRÉSTAMOS");
             System.out.println("SALIR");
             opcion = sc.nextInt();
             switch (opcion) {
@@ -158,6 +160,16 @@ public class Biblioteca2025 {
                 
                 case 6: {
                     listadoPrestamoLib();
+                    break;
+                }
+                
+                case 7: {
+                    libroMasPrestado();
+                    break;
+                }
+                
+                case 8: {
+                    usuarioMasPrestamos();
                     break;
                 }
             }
@@ -278,13 +290,13 @@ public class Biblioteca2025 {
             } else if  (libros.get(posLibro).getEjemplares()>0) {
                 if ((buscaPrestamo(dni, isbn))==-1) {
                 LocalDate hoy=LocalDate.now();
-                prestamos.add(new Prestamo(libros.get(posLibro),usuarios.get(posLibro),hoy,hoy.plusDays(15)));
+                prestamos.add(new Prestamo(libros.get(posLibro),usuarios.get(posUsuario),hoy,hoy.plusDays(15)));
                 libros.get(posLibro).setEjemplares(libros.get(posLibro).getEjemplares()-1);
                 } else {
-                    System.out.println("Este usuari ya tiene este libro en préstamo");
+                    System.out.println("Este usuario ya tiene este libro en préstamo");
                 }
             } else {
-                System.out.println("No quedan unidades disponibles de este ");
+                System.out.println("No quedan unidades disponibles de este libro :( ");
             }
         }
     }
@@ -374,6 +386,61 @@ public class Biblioteca2025 {
                     System.out.println(ph.getUsuarioPrest());
                 }
             }
+    }
+    
+    private void libroMasPrestado() {
+        int prestamosMax = 0;
+        Libro libroMasPrestado = null;
+        for (Libro libro : libros) {
+            int contador = 0;
+            for (Prestamo p : prestamos) {
+                if (p.getLibroPrest().getIsbn().equals(libro.getIsbn())) {
+                    contador ++;
+                }
+            }
+            for (Prestamo ph : prestamosHist) {
+                if (ph.getLibroPrest().getIsbn().equals(libro.getIsbn())) {
+                    contador ++;
+                }
+            }
+            if (contador > prestamosMax) {
+                prestamosMax = contador;
+                libroMasPrestado = libro;
+            }
+        }
+        if (libroMasPrestado!=null) {
+            System.out.println("El libro más prestado de la biblioteca es " + "'" + libroMasPrestado.getTitulo() + "'" + " con " + prestamosMax + " préstamos" );
+        } else {
+            System.out.println("No se han registrado préstamos :(");
+        }
+    }
+    
+    private void usuarioMasPrestamos() {
+        int prestamosMax = 0;
+        Usuario usuarioMasPrestamos = null;
+        for (Usuario usuario : usuarios) {
+            int contador = 0;
+            for (Prestamo p : prestamos) {
+                if (p.getUsuarioPrest().getDni().equals(usuario.getDni())) {
+                    contador++;
+                }
+            }
+            for (Prestamo p: prestamosHist) {
+                if (p.getUsuarioPrest().getDni().equals(usuario.getDni())) {
+                    contador++;
+                }
+            }
+            if (contador > prestamosMax) {
+                prestamosMax = contador;
+                usuarioMasPrestamos = usuario;
+            }
+        }
+        if (usuarioMasPrestamos!=null) {
+            System.out.println("El usuario con más préstamos de la biblioteca es " + usuarioMasPrestamos.getNombre() + " con " + prestamosMax + " préstamos");
+        } else {
+            System.out.println("No se han registrado préstamos :(");
+        }
+        
     }
 //</editor-fold>
     
