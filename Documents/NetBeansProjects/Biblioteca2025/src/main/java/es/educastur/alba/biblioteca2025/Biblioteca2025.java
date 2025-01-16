@@ -41,6 +41,7 @@ public class Biblioteca2025 {
             System.out.println("1. LIBROS");
             System.out.println("2. USUARIOS");
             System.out.println("3. PRÉSTAMOS");
+            System.out.println("4. LISTADOS");
             opcion = sc.nextInt();
             switch (opcion) {
                 case 1: {
@@ -53,6 +54,10 @@ public class Biblioteca2025 {
                 }
                 case 3: {
                     menuPrestamos();
+                    break;
+                }
+                case 4: {
+                    menuListados();
                     break;
                 }
             }
@@ -129,10 +134,7 @@ public class Biblioteca2025 {
             System.out.println("2. DEVOLVER PRÉSTAMO");
             System.out.println("3. PRÓRROGA DE PRÉSTAMOS");
             System.out.println("4. LISTADO GENERAL DE PRÉSTAMOS");
-            System.out.println("5. LISTADO DE PRÉSTAMOS-USUARIOS");
-            System.out.println("6. LISTADO DE PRÉSTAMOS-LIBROS");
-            System.out.println("7. LIBRO MÁS PRESTADO");
-            System.out.println("8. USUARIO CON MÁS PRÉSTAMOS");
+            
             System.out.println("9. SALIR");
             opcion = sc.nextInt();
             switch (opcion) {
@@ -152,29 +154,44 @@ public class Biblioteca2025 {
                     listadoPrestamo();
                     break;
                 }
-                
-                case 5: {
-                    listadoPrestamoUsu();
-                    break;
-                }
-                
-                case 6: {
-                    listadoPrestamoLib();
-                    break;
-                }
-                
-                case 7: {
-                    libroMasPrestado();
-                    break;
-                }
-                
-                case 8: {
-                    usuarioMasPrestamos();
-                    break;
-                }
+             
             }
         } while (opcion != 9);
     }
+    private void menuListados() {
+        Scanner sc= new Scanner(System.in);
+        int opcion=0;
+        do {
+            System.out.println("PRÉSTAMOS");
+            System.out.println("1. LISTADO DE PRÉSTAMOS-USUARIOS");
+            System.out.println("2. LISTADO DE PRÉSTAMOS-LIBROS");
+            System.out.println("3. LIBRO MÁS PRESTADO");
+            System.out.println("4. USUARIO CON MÁS PRÉSTAMOS");
+            System.out.println("9. SALIR");
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1: {
+                    listadoPrestamoUsu();
+                    break;
+                }
+                case 2: {
+                    listadoPrestamoLib();
+                    break;
+                }
+                case 3: {
+                    libroMasPrestado();
+                    break;
+                }
+                case 4: {
+                    usuarioMasPrestamos();
+                    break;
+                }
+             
+            }
+        } while (opcion != 9);
+    }
+   
+    
 //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="GESTIÓN LIBROS">
@@ -343,7 +360,11 @@ public class Biblioteca2025 {
        }
     }
     
-    private void listadoPrestamoUsu() {
+//</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="LISTADOS">
+    
+        private void listadoPrestamoUsu() {
         String dni= solicitaDni();
         int pos= buscaDni(solicitaDni());
         if (pos==-1) {
@@ -389,23 +410,88 @@ public class Biblioteca2025 {
     }
     
     private void libroMasPrestado() {
-        int prestamosMax = 0;
-        Libro libroMasPrestado = null;
-        for (Libro libro : libros) {
-            int contador = 0;
+        ArrayList <Integer> contadoresLibros=new ArrayList();
+        int contador;
+        for (Libro l : libros) {
+            contador = 0;
             for (Prestamo p : prestamos) {
-                if (p.getLibroPrest().getIsbn().equals(libro.getIsbn())) {
+                if (l==p.getLibroPrest()) {
                     contador ++;
                 }
             }
             for (Prestamo ph : prestamosHist) {
-                if (ph.getLibroPrest().getIsbn().equals(libro.getIsbn())) {
+                if (l==ph.getLibroPrest()) {
+                    contador ++;
+                }
+            } 
+            contadoresLibros.add(contador);
+         }
+         int maxLibros=0;
+            for (int c:contadoresLibros) {
+                if (c>maxLibros) {
+                    maxLibros=c;
+                }
+            }
+        System.out.println("El libro más prestado de la biblioteca con " + maxLibros + " préstamos es: " );
+        for (int i = 1; i < libros.size(); i++) {
+            if (contadoresLibros.get(i)==maxLibros) {
+                    System.out.println("'" + libros.get(i) + "'");
+            }
+        }
+    }
+                
+    private void usuarioMasPrestamos() {
+    ArrayList <Integer> contadoresUsuarios=new ArrayList();
+        int contador;
+        for (Usuario u : usuarios) {
+            contador=0;
+            for (Prestamo p:prestamos) {
+                if (u==p.getUsuarioPrest()){
+                    contador++;
+                }
+            }
+            for (Prestamo p:prestamosHist) {
+                if (u==p.getUsuarioPrest()){
+                    contador++;
+                }
+            }
+            contadoresUsuarios.add(contador);
+        }
+        
+        int max=0;
+        for (int c:contadoresUsuarios){
+            if (c>max){
+                max=c;
+            }
+        }
+        System.out.println("Los usuarios/as mas lectores/as con " + max + " prestamos son: " );
+               
+        for (int i = 0; i < contadoresUsuarios.size(); i++) {
+            if (contadoresUsuarios.get(i)==max){
+                System.out.println(usuarios.get(i));
+            }
+        }
+    }               
+    
+    /** OTRA FORMA DE HACERLO SIN USAR ARRAYS:
+        private void libroMasPrestado() {
+        int prestamosMax = 0;
+        Libro libroMasPrestado = null;
+        for (Libro l : libros) {
+            int contador = 0;
+            for (Prestamo p : prestamos) {
+                if (p.getLibroPrest().getIsbn().equals(l.getIsbn())) {
+                    contador ++;
+                }
+            }
+            for (Prestamo ph : prestamosHist) {
+                if (ph.getLibroPrest().getIsbn().equals(l.getIsbn())) {
                     contador ++;
                 }
             }
             if (contador > prestamosMax) {
                 prestamosMax = contador;
-                libroMasPrestado = libro;
+                libroMasPrestado = l;
             }
         }
         if (libroMasPrestado!=null) {
@@ -418,21 +504,21 @@ public class Biblioteca2025 {
     private void usuarioMasPrestamos() {
         int prestamosMax = 0;
         Usuario usuarioMasPrestamos = null;
-        for (Usuario usuario : usuarios) {
+        for (Usuario u : usuarios) {
             int contador = 0;
             for (Prestamo p : prestamos) {
-                if (p.getUsuarioPrest().getDni().equals(usuario.getDni())) {
+                if (p.getUsuarioPrest().getDni().equals(u.getDni())) {
                     contador++;
                 }
             }
             for (Prestamo p: prestamosHist) {
-                if (p.getUsuarioPrest().getDni().equals(usuario.getDni())) {
+                if (p.getUsuarioPrest().getDni().equals(u.getDni())) {
                     contador++;
                 }
             }
             if (contador > prestamosMax) {
                 prestamosMax = contador;
-                usuarioMasPrestamos = usuario;
+                usuarioMasPrestamos = u;
             }
         }
         if (usuarioMasPrestamos!=null) {
@@ -440,8 +526,9 @@ public class Biblioteca2025 {
         } else {
             System.out.println("No se han registrado préstamos :(");
         }
-        
     }
+    */ 
+    
 //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="MÉTODOS AUXILIARES">
