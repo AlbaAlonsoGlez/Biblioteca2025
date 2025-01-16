@@ -366,7 +366,7 @@ public class Biblioteca2025 {
     
         private void listadoPrestamoUsu() {
         String dni= solicitaDni();
-        int pos= buscaDni(solicitaDni());
+        int pos=buscaDni(dni);
         if (pos==-1) {
             System.out.println("No hay ningún usuario con ese DNI :(");
         } else {
